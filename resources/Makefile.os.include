@@ -1,0 +1,23 @@
+# 该文件用于设置操作系统相关的属性，如动态链接库/静态库的后缀、
+OSTYPE ?= linux
+
+ifeq ($(OSTYPE), linux)
+  ifeq ($(filter x86_64, $(shell uname -a)), )
+    OSARCH = i386
+  else
+    OSARCH = x86_64
+  endif
+  UBUNTU_VERSION:=$(shell lsb_release -sr)
+endif
+
+# extensions and prefixes
+STATIC_LIB_EXTENSION = .a
+ifneq ($(OSTYPE), windows)
+  LIB_PREFIX = lib
+  WEBOTS_LIB_PATH=$(WEBOTS_HOME)/lib
+  ifeq ($(OSTYPE),linux)
+    SHARED_LIB_EXTENSION = .so
+  else # macos
+    SHARED_LIB_EXTENSION = .dylib
+  endif
+endif
